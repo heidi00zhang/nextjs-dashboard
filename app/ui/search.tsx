@@ -2,7 +2,8 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import useDebounce from "../hooks/useDebounce";
+import { useEffect } from "react";
 
 export default function Search({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
@@ -44,24 +45,4 @@ export default function Search({ placeholder }: { placeholder: string }) {
   );
 }
 
-function useDebounce<T extends (...args: any[]) => void>(
-  fuc: T,
-  delay: number
-) {
-  let timeId = useRef<NodeJS.Timeout>(undefined);
 
-  const debonceFunc = (...args: any[]) => {
-    clearTimeout(timeId.current);
-
-    timeId.current = setTimeout(() => {
-      fuc(args);
-    }, delay);
-  };
-
-  useEffect(() => {
-    // The cleanup function inside useEffect will execute once, when the component unmounts.
-    return () => clearTimeout(timeId.current);
-  }, []);
-
-  return debonceFunc;
-}
